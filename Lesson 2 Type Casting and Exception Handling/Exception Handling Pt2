@@ -1,0 +1,142 @@
+# Python also grants us the ability to create our own Exceptions
+# We shall be covering this and more in this segment
+
+# Custom Exception Base Class
+class MyCustomError(Exception):
+    """Base class for custom exceptions."""
+    pass
+
+# Custom Exception for Invalid Input
+class InvalidInputError(MyCustomError):
+    """Raised when an invalid input is provided."""
+    def __init__(self, message="Invalid input provided."):
+        super().__init__(message)
+
+# Custom Exception for Calculation Errors
+class CalculationError(MyCustomError):
+    """Raised when there is an error in calculations."""
+    def __init__(self, operation, message="Error occurred during calculation."):
+        self.operation = operation
+        super().__init__(f"{message} Operation: {operation}")
+
+# Function that uses our custom exceptions
+def divide_numbers(a, b):
+    # Check if inputs are valid
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise InvalidInputError("Both inputs must be numeric.")
+    
+    # Check for division by zero
+    if b == 0:
+        raise CalculationError("Division", "Cannot divide by zero.")
+    
+    # Perform division
+    return a / b
+
+# Testing out Custom Exceptions using Custom Inputs
+test_cases = [(10, 2), (10, '1'), (10, 0)]  # Test cases: (valid input, invalid input, division by zero)
+
+# Loop through each test case
+for a, b in test_cases:
+    try:
+        # Attempt to divide the numbers, will raise custom exceptions if inputs are invalid
+        result = divide_numbers(a, b)
+        print(f"Result of dividing {a} by {b}: {result}")  # If no exception, print the result
+    except InvalidInputError as e:
+        # Handle InvalidInputError if non-numeric input is provided
+        print(f"InvalidInputError: {e}")
+    except CalculationError as e:
+        # Handle CalculationError if division by zero occurs
+        print(f"CalculationError: {e}")
+    print()  # Print a newline for separation between test case results
+
+# Indicating that all test cases have been processed
+print("Testing Completed")
+print()
+
+# -----------------------------------------
+# Defining Clean-up Actions with Finally
+# These actions are executed under all circumstances, even if an exception occurs, and are typically used to release resources
+try:
+    # Simulate a situation where a KeyboardInterrupt exception occurs (this could be triggered by pressing Ctrl+C)
+    raise KeyboardInterrupt
+except KeyboardInterrupt:
+    print("Keyboard error occurred")
+finally:
+    # The finally block always runs, regardless of whether an exception occurred
+    print("We are done. Let's go!")  # Clean-up action is executed here
+print()
+# The finally block is executed as the last possible clause before the try block terminates
+# -----------------------------------------
+
+# Some Examples of Finally Block Behavior
+def bool_return():
+    try:
+        return True
+    finally:
+        return False
+
+print(bool_return())  # Output will be False because the finally block overrides the try return
+print()
+# Another More Elaborate Example of Finally Block
+def divide(x, y):
+    try:
+        result = x / y
+    except ZeroDivisionError:  # Handle potential division by zero error
+        print("Division by Zero!")
+    else:
+        print("Result is", result)  # Print our result if no exception occurs
+    finally:
+        print("Executing Finally Clause")  # This block executes after every iteration
+
+divide(2, 1)  # Function call without any exception
+divide(2, 0)  # Function call triggering division by zero error
+print()
+# -----------------------------------------
+# Raising and Handling Multiple Exceptions
+def func():
+    excs = [OSError("Err1"), SystemError("Err2")]
+    raise ExceptionGroup("There were problems", excs)
+
+try:
+    func()
+except Exception as e:
+    print(f"Caught an Exception {type(e)}: {e}")
+print()
+# Handling Nested Exception Groups
+def func():
+    raise ExceptionGroup(
+        "Group1",
+        [
+            OSError(1),
+            SystemError(2),
+            ExceptionGroup(
+                "Group2",
+                [
+                    OSError(3),
+                    RecursionError(4)
+                ]
+            )
+        ]
+    )
+
+print()
+
+#Uncomment the following codes to See Group Exception Handling in Action
+# try:
+#     func()
+# except* OSError as e:
+#     print("There were OSErrors")
+# except* SystemError as e:
+#     print("There were SystemErrors")
+# print()
+
+# -----------------------------------------
+# Adding Notes to Exceptions
+# Adding notes to exceptions can be useful by providing extra information about the error,
+# making it easy for the users to understand in more detail what the error is and how they can fix it
+try:
+    raise TypeError("Bad Type")
+except Exception as e:
+    e.add_note("You might be combining values of different types that are not compatible")
+    raise  # Re-raise the exception after adding a note
+print()
