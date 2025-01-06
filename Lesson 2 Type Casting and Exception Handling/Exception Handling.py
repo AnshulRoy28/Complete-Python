@@ -133,23 +133,51 @@ print()
 #Exceptions are handled even if they occur inside functions called by the try bloack like below 
 
 def div_by_zero():
-    sample=1/0
+    sample=1/0 #Divide by zero error
 
 try:
-    div_by_zero()
+    div_by_zero() #Calling this function results in an exeption to occur which is in turn handled by the except block
 except ZeroDivisionError as err:
     print("Handling run time error that occured in the function: ",err)
 print()
 
 
-#We can alsoe raise exceptions artifially forcing them to occur 
+#We can alsoe raise exceptions artifially forcing them to occur
 #raise(NameError("Hi how are you")) #Uncommenting this code forces the name error to occur
 
 #Multiple Exceptions can occur at the same time as well i.e when an exception occures inside an 
-#Except block as shown below 
+#Except block as shown below
 
+#try:
+#    open("Sample.txt")
+#except OSError:
+#    raise RuntimeError("Unable to handle the OS Error")
+
+#Anouther Example of Chaining Exmaples
+#def func():
+#    raise ConnectionError #Inside this function we raise the Connection Error
+#try:
+#    func() #Calling the function to trigger the Exception
+#except ConnectionError as exc: #Calling the exception as an alias
+#    raise RuntimeError('Failed to open the database') from exc #Raise a secondary exception inside the original handle block for the exception
+
+#We are also able to disable Automatic Exception Chaining by using the from None Idiom
+
+print("Preventing the Exception chain from being Triggered")
 try:
-    open("Sample.txt")
-except OSError:
-    raise RuntimeError("Unable to handle the OS Error")
+    #Inner Try Except Block to handle the OSError
+    try:
+        #Attempt to the file that does not exist
+        open('myFile.txt')
+    except OSError:
+        #When the OS error occures raise a Runtime Error
+        #The "from None" ensures that we do not chain together any more exceptions
+        raise RuntimeError("Custom Message: I am unable to open the File") from None
+except RuntimeError as err:
+    #Add an outer Except block to catch the RuntimeError
+    print(f"RuntimeError Handled {err}")
+
+print("We handled the Exceptions")
+
+
 
