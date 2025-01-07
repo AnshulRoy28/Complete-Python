@@ -1,0 +1,92 @@
+#What is an array?
+#Well an array is a collection of items stored at contiguous memory Locations
+#It allows us to store multiple elements of the SAME TYPE in one variable 
+#Similar to a list. In fact arrays are more effecient than lists in temrs of memory usage 
+#When working with larger Datasets as they store data in a continuous block of memory
+
+#How to use Arrays:-
+#In order to use arrays in python we need to import the array module
+from array import array
+
+#Creating an array in python:-
+#To create an array in python we can use the following syntax
+#ArrayName=array((typecode),[elements])
+arr=array('i',[1,2,3,4,5])
+# the typecode tells the program what the type of the array is, in python we have several 
+#Type Codes such as
+# 'i':- Integer
+# 'f':- Float
+# 'd':- Double # A double is essentially a datatype that can store very large floating point numbers
+# 'u':- Unicode # Unicode Values are a type of universal encoded value
+
+#Like Lists their are a variaety of operations we can perform on Arrays as well such as 
+
+#Accessing elements of an array
+print(arr[0]) #We can use indexing to access elements of an array
+print()
+
+#Appending elements into an array:
+arr.append(10)#Adds the element into the end of the Array
+print(arr)
+print()
+
+#Inserting elements at a specific Position in the array
+arr.insert(2,10) #Array_Name.insert(IndexNumber,Value)
+print(arr)
+print()
+
+#In order to insert Multiple Elements into an Array we can use the Extend Function
+arr.extend([6,7,8,9,12,7,6]) #Array_Name.extend([List of numbers])
+print(arr) #Adds the list of numbers to the back of the Array
+print()
+
+#We can also combine the elements of one or more arrays in a process called concatination
+
+other_arr=array('i',[11,12,13,14,15])
+new_array=arr+other_arr
+print(new_array)
+print()
+
+#Removing an element from an array
+arr.remove(10)#Array_Name.remove(Target_Element)
+print(arr) #This Function removes the first occurance of the target element
+print()
+
+#Popping an element
+popped=arr.pop(3) #Array_Name.pop(Target_Element)
+print(popped) #This function removes the element in the target location and returns that value
+print(arr)
+print()
+
+#Finding Index of an Element in an array
+index=arr.index(3) #Array_Name.index(Target_Element)
+print(index) #This function prints the index of the first occurance of an element
+print()
+
+#Traversal in Array:-
+# We can iterate over an array using a for loop like we would have done with a list
+
+for element in arr: #For loop to iterate through the elements of the list
+    print(element,end=" ") 
+print()
+#Some Common Built in functions in arrays are 
+print(arr)
+arr.reverse() #Reverses the order of elements in the list, does not return anything 
+#The array is moddified in place
+print(arr)
+print(arr.count(1)) #Count the number of occurances of a particular values
+print(len(arr)) #Returns the length of the array in question
+
+
+#Anouther Very IMportant Topic is Slicing i.e Extracting a part of the input for processing
+temp1=arr[0:6] #Result_Variable_Name=Array_name[Start_Index,End_Index,step],
+temp2=arr[0:6:2] #Slice the varaible keeping a stepsize of 2
+print(temp1)
+print(temp2)
+print(arr)
+
+#Some Limitations of Arrays:- We saw the functionallity of arrays in python However their are some flaws
+#That in they can only store elements of one uniform datatype and they are only single dimensional as in
+#You cannot represent them as matrices however this can be solved using the Numpy Library which will be covered at a later date
+
+
