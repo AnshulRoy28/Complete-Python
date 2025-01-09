@@ -1,0 +1,101 @@
+# Hash Table Implementation in Python
+
+# What is a Hash Table?
+# ---------------------
+# A hash table stores key-value pairs for fast lookups. It uses a hash function to map keys to indexes in an array.
+
+# Analogy:
+# Think of it like mailboxes. Each key is mapped to a specific mailbox using a hash function. 
+# To store or retrieve a value, simply use the key to find the right mailbox.
+
+# Advantages:
+# 1. Fast lookups and updates (O(1) in ideal cases).
+# 2. Efficient dynamic storage.
+# 3. Widely used in caching and dictionaries.
+
+# Limitations:
+# 1. Collisions require extra handling (e.g., chaining).
+# 2. Can have memory overhead.
+# 3. Performance depends on the hash function quality.
+
+# Node class to store key-value pairs
+class Node:
+    def __init__(self, key, value):
+        self.key = key  # Key of the pair
+        self.value = value  # Value of the pair
+        self.next = None  # Pointer to the next node in the bucket
+
+# Hash Table class
+class HashTable:
+    def __init__(self, size=10):
+        self.size = size  # Number of buckets
+        self.table = [None] * self.size  # Initialize table with empty buckets
+    
+    # Hash function to compute index
+    def hash_function(self, key):
+        return hash(key) % self.size  # Use Python's built-in hash and mod by size
+    
+    # Insert or update a key-value pair
+    def insert(self, key, value):
+        index = self.hash_function(key)  # Compute the bucket index
+        if self.table[index] is None:  # If no collision
+            self.table[index] = Node(key, value)
+        else:  # Handle collision using chaining
+            current = self.table[index]
+            while current:
+                if current.key == key:  # Update value if key already exists
+                    current.value = value
+                    return
+                if current.next is None:  # Insert at the end of the chain
+                    current.next = Node(key, value)
+                    return
+                current = current.next
+    
+    # Retrieve a value by key
+    def get(self, key):
+        index = self.hash_function(key)  # Compute the bucket index
+        current = self.table[index]
+        while current:
+            if current.key == key:  # If key is found
+                return current.value
+            current = current.next
+        return None  # If key is not found
+    
+    # Remove a key-value pair
+    def remove(self, key):
+        index = self.hash_function(key)  # Compute the bucket index
+        current = self.table[index]
+        prev = None
+        while current:
+            if current.key == key:  # If key is found
+                if prev:  # If it's not the first node
+                    prev.next = current.next
+                else:  # If it's the first node in the bucket
+                    self.table[index] = current.next
+                return
+            prev = current
+            current = current.next
+        print(f"Key {key} not found")
+    
+    # Display the hash table
+    def display(self):
+        for i in range(self.size):
+            print(f"Bucket {i}:", end=" ")
+            current = self.table[i]
+            while current:
+                print(f"({current.key}: {current.value})", end=" -> ")
+                current = current.next
+            print("None")
+
+# Sample Usage
+ht = HashTable()
+ht.insert("apple", 10)
+ht.insert("banana", 20)
+ht.insert("grape", 30)
+ht.insert("cherry", 40)
+ht.display()
+
+print("Value for 'banana':", ht.get("banana"))  # Output: 20
+ht.remove("banana")
+ht.display()
+print("Value for 'banana':", ht.get("banana"))  # Output: None
