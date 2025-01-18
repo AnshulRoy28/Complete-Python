@@ -3,6 +3,8 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+#Method 1
 class Solution(object):
     def deleteDuplicates(self, head):
         """
@@ -18,4 +20,19 @@ class Solution(object):
                 start=start.next
         return head
 
+#Method 2 2-Pointer
+class Solution(object):
+    def deleteDuplicates(self, head):
+        """
+        :type head: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        start=head
+        while start!=None:
+            next_node=start.next
+            while next_node!=None and start.val==next_node.val:
+                start.next=next_node.next
+                next_node=next_node.next
+            start=start.next
+        return head
         
